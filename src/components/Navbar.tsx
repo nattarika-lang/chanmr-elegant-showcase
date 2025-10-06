@@ -26,28 +26,27 @@ const Navbar = ({ language, onLanguageToggle }: NavbarProps) => {
             </h1>
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems[language].map((item, index) => (
               <a
                 key={index}
                 href={`#${item.toLowerCase()}`}
-                className="text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
               >
                 {item}
               </a>
             ))}
             
             {/* Language Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={onLanguageToggle}
-              className="gap-2"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 transition-all duration-300 hover:scale-105"
             >
               <Globe className="h-4 w-4" />
-              {language === "en" ? "TH" : "EN"}
-            </Button>
+              <span className="inline-block transition-transform duration-300">
+                {language === "en" ? "TH" : "EN"}
+              </span>
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -61,7 +60,7 @@ const Navbar = ({ language, onLanguageToggle }: NavbarProps) => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border">
+          <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-4">
               {navItems[language].map((item, index) => (
                 <a
@@ -73,15 +72,15 @@ const Navbar = ({ language, onLanguageToggle }: NavbarProps) => {
                   {item}
                 </a>
               ))}
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={onLanguageToggle}
-                className="gap-2 justify-start"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 transition-all duration-300 w-fit"
               >
                 <Globe className="h-4 w-4" />
-                {language === "en" ? "ไทย" : "English"}
-              </Button>
+                <span className="inline-block transition-transform duration-300">
+                  {language === "en" ? "ไทย" : "English"}
+                </span>
+              </button>
             </div>
           </div>
         )}

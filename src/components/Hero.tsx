@@ -1,12 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-bg.jpg";
+import { useState, useEffect } from "react";
 
 interface HeroProps {
   language: "en" | "th";
 }
 
 const Hero = ({ language }: HeroProps) => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const content = {
     en: {
       title: "Building Excellence Through Innovation",
@@ -26,10 +35,13 @@ const Hero = ({ language }: HeroProps) => {
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Overlay */}
+      {/* Parallax Background Image with Overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-75"
+        style={{ 
+          backgroundImage: `url(${heroImage})`,
+          transform: `translateY(${scrollY * 0.5}px)`,
+        }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--hero-dark))] via-[hsl(var(--hero-dark))/0.85] to-[hsl(var(--hero-dark))/0.6]" />
       </div>
@@ -37,24 +49,24 @@ const Hero = ({ language }: HeroProps) => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-3xl animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight animate-slide-in-left" style={{ animationDelay: '0.2s' }}>
             {t.title}
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
+          <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.4s' }}>
             {t.subtitle}
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 animate-slide-in-left" style={{ animationDelay: '0.6s' }}>
             <Button 
               size="lg" 
-              className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2 text-lg px-8"
+              className="bg-accent text-accent-foreground hover:bg-accent/90 hover:scale-105 transition-transform gap-2 text-lg px-8"
             >
               {t.cta}
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-primary text-lg px-8"
+              className="border-white text-white hover:bg-white hover:text-primary hover:scale-105 transition-all text-lg px-8"
             >
               {t.ctaSecondary}
             </Button>

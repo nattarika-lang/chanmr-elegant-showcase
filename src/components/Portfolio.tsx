@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import caseStudy1 from "@/assets/case-study-1.jpg";
 import caseStudy2 from "@/assets/case-study-2.jpg";
 import caseStudy3 from "@/assets/case-study-3.jpg";
@@ -10,6 +9,7 @@ interface PortfolioProps {
 }
 
 const Portfolio = ({ language }: PortfolioProps) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const content = {
     en: {
       title: "Featured Projects",
@@ -66,9 +66,9 @@ const Portfolio = ({ language }: PortfolioProps) => {
   const t = content[language];
 
   return (
-    <section id="portfolio" className="py-20 bg-background">
+    <section id="portfolio" className="py-20 bg-background" ref={ref}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             {t.title}
           </h2>
@@ -77,46 +77,40 @@ const Portfolio = ({ language }: PortfolioProps) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {t.projects.map((project, index) => (
-            <Card 
-              key={index} 
-              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 animate-scale-in border-border/50"
-              style={{ animationDelay: `${index * 0.15}s` }}
-            >
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-4 left-4 right-4">
-                  <span className="inline-block px-3 py-1 bg-accent text-accent-foreground text-xs font-semibold rounded-full mb-2">
-                    {project.category}
-                  </span>
+        <div className="overflow-x-auto pb-4 -mx-4 px-4 lg:overflow-visible scrollbar-hide">
+          <div className="flex lg:grid lg:grid-cols-3 gap-8 min-w-max lg:min-w-0">
+            {t.projects.map((project, index) => (
+              <Card 
+                key={index} 
+                className={`group overflow-hidden hover:shadow-2xl transition-all duration-500 flex-shrink-0 w-80 lg:w-auto border-border/50 ${
+                  isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
+                }`}
+                style={{ transitionDelay: `${index * 0.15}s` }}
+              >
+                <div className="relative h-64 overflow-hidden">
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <span className="inline-block px-3 py-1 bg-accent text-accent-foreground text-xs font-semibold rounded-full">
+                      {project.category}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {project.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <div className="text-center">
-          <Button 
-            size="lg" 
-            className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2"
-          >
-            {t.cta}
-            <ArrowRight className="h-5 w-5" />
-          </Button>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {project.description}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </section>

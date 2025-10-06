@@ -1,11 +1,13 @@
 import { Check } from "lucide-react";
 import aboutImage from "@/assets/about-image.jpg";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 interface AboutProps {
   language: "en" | "th";
 }
 
 const About = ({ language }: AboutProps) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.3 });
   const content = {
     en: {
       title: "Engineering Excellence Since 1995",
@@ -36,23 +38,23 @@ const About = ({ language }: AboutProps) => {
   const t = content[language];
 
   return (
-    <section id="about" className="py-20 bg-secondary">
+    <section id="about" className="py-20 bg-secondary" ref={ref}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Image */}
-          <div className="animate-slide-in-left">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-20'}`}>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl group">
               <img 
                 src={aboutImage} 
                 alt="Chanmr Company Facility"
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent" />
             </div>
           </div>
 
           {/* Content */}
-          <div className="animate-slide-in-right">
+          <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`}>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               {t.title}
             </h2>

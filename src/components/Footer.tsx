@@ -1,10 +1,12 @@
 import { Facebook, Twitter, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 interface FooterProps {
   language: "en" | "th";
 }
 
 const Footer = ({ language }: FooterProps) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.1, triggerOnce: true });
   const content = {
     en: {
       company: {
@@ -53,8 +55,8 @@ const Footer = ({ language }: FooterProps) => {
   const t = content[language];
 
   return (
-    <footer className="bg-[hsl(var(--hero-dark))] text-white pt-16 pb-8">
-      <div className="container mx-auto px-4">
+    <footer className="bg-[hsl(var(--hero-dark))] text-white pt-16 pb-8" ref={ref}>
+      <div className={`container mx-auto px-4 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
@@ -65,13 +67,13 @@ const Footer = ({ language }: FooterProps) => {
                 : "ผู้นำด้านที่ปรึกษาองค์กรและวิศวกรรมเพื่ออนาคตของประเทศไทย"}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent flex items-center justify-center transition-colors">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent hover:scale-110 flex items-center justify-center transition-all duration-300">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent flex items-center justify-center transition-colors">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent hover:scale-110 flex items-center justify-center transition-all duration-300">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent flex items-center justify-center transition-colors">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/10 hover:bg-accent hover:scale-110 flex items-center justify-center transition-all duration-300">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -83,7 +85,7 @@ const Footer = ({ language }: FooterProps) => {
             <ul className="space-y-2">
               {t.company.links.map((link, index) => (
                 <li key={index}>
-                  <a href="#" className="text-white/70 hover:text-accent transition-colors">
+                  <a href="#" className="text-white/70 hover:text-accent hover:translate-x-1 transition-all duration-300 inline-block">
                     {link}
                   </a>
                 </li>
@@ -97,7 +99,7 @@ const Footer = ({ language }: FooterProps) => {
             <ul className="space-y-2">
               {t.services.links.map((link, index) => (
                 <li key={index}>
-                  <a href="#" className="text-white/70 hover:text-accent transition-colors">
+                  <a href="#" className="text-white/70 hover:text-accent hover:translate-x-1 transition-all duration-300 inline-block">
                     {link}
                   </a>
                 </li>

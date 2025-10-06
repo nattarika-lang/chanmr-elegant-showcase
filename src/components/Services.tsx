@@ -1,11 +1,13 @@
 import { Building2, Wrench, TrendingUp, Users, Cog, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 interface ServicesProps {
   language: "en" | "th";
 }
 
 const Services = ({ language }: ServicesProps) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const content = {
     en: {
       title: "Our Services",
@@ -84,9 +86,9 @@ const Services = ({ language }: ServicesProps) => {
   const t = content[language];
 
   return (
-    <section id="services" className="py-20 bg-secondary">
+    <section id="services" className="py-20 bg-secondary" ref={ref}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             {t.title}
           </h2>
@@ -101,12 +103,14 @@ const Services = ({ language }: ServicesProps) => {
             return (
               <Card 
                 key={index} 
-                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-scale-in border-border/50"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className={`group hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border-border/50 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 0.1}s` }}
               >
                 <CardContent className="p-6">
-                  <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="h-7 w-7 text-primary" />
+                  <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
+                    <Icon className="h-7 w-7 text-primary group-hover:rotate-12 transition-transform duration-300" />
                   </div>
                   <h3 className="text-xl font-semibold mb-3 text-foreground">
                     {service.title}

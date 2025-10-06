@@ -1,12 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 interface InsightsProps {
   language: "en" | "th";
 }
 
 const Insights = ({ language }: InsightsProps) => {
+  const { ref, isVisible } = useScrollAnimation({ threshold: 0.2 });
   const content = {
     en: {
       title: "Latest Insights",
@@ -63,9 +64,9 @@ const Insights = ({ language }: InsightsProps) => {
   const t = content[language];
 
   return (
-    <section id="insights" className="py-20 bg-background">
+    <section id="insights" className="py-20 bg-background" ref={ref}>
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16 animate-fade-in">
+        <div className={`text-center mb-16 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             {t.title}
           </h2>
@@ -74,12 +75,14 @@ const Insights = ({ language }: InsightsProps) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {t.articles.map((article, index) => (
             <Card 
               key={index} 
-              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-scale-in border-border/50"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className={`group hover:shadow-2xl transition-all duration-500 overflow-hidden hover:scale-105 border-border/50 ${
+                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+              style={{ transitionDelay: `${index * 0.1}s` }}
             >
               <CardContent className="p-6">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
@@ -89,29 +92,19 @@ const Insights = ({ language }: InsightsProps) => {
                 <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-4">
                   {article.category}
                 </span>
-                <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-semibold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
                   {article.title}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   {article.excerpt}
                 </p>
-                <button className="text-primary font-medium text-sm flex items-center gap-2 group-hover:gap-3 transition-all">
+                <button className="text-primary font-medium text-sm flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
                   {language === "en" ? "Read More" : "อ่านเพิ่มเติม"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </CardContent>
             </Card>
           ))}
-        </div>
-
-        <div className="text-center">
-          <Button 
-            variant="outline" 
-            size="lg"
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-          >
-            {t.cta}
-          </Button>
         </div>
       </div>
     </section>
